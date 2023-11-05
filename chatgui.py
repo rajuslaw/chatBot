@@ -61,6 +61,7 @@ def chatbot_response(text):
 
 def send():
     msg = EntryBox.get("1.0",'end-1c').strip()
+    print(msg)
     EntryBox.delete("0.0",END)
     if msg != '':
         ChatLog.config(state=NORMAL)

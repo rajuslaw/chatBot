@@ -1,1 +1,3 @@
 https://hiteshmishra708.medium.com/build-your-first-chatbot-using-nltk-and-keras-6470501abe28
+
+https://pykit.org/chatbot-in-python-using-nlp/
