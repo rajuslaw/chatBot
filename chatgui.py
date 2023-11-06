@@ -9,6 +9,8 @@ import json
 import random
 #Creating GUI with tkinter
 import tkinter
+import requests
+
 from tkinter import *
 intents = json.loads(open('intents.json').read())
 words = pickle.load(open('words.pkl','rb'))
@@ -55,9 +57,22 @@ def getResponse(ints, intents_json):
             break
     return result
 def chatbot_response(text):
-    ints = predict_class(text, model)
-    res = getResponse(ints, intents)
-    return res
+    if "how many requests processed" in text.lower():
+        # Make a GET request to the API endpoint to get the data
+        api_url = "https://reqres.in/api/users/2"
+        response = requests.get(api_url)
+
+        if response.status_code == 200:
+            apiResponse = response.json()
+            response_text = f"We have processed {apiResponse['data']['id']} requests so far."
+        else:
+            response_text = "Sorry, I couldn't retrieve the data at the moment."
+
+        return response_text
+    else:
+        ints = predict_class(text, model)
+        res = getResponse(ints, intents)
+        return res
 
 def send():
     msg = EntryBox.get("1.0",'end-1c').strip()
@@ -72,12 +87,20 @@ def send():
         ChatLog.config(state=DISABLED)
         ChatLog.yview(END)
 base = Tk()
-base.title("Hello")
+base.title("SCM bot")
 base.geometry("400x500")
 base.resizable(width=FALSE, height=FALSE)
+
+# Function to display the initial welcome message
+def display_welcome_message():
+    ChatLog.config(state=NORMAL)
+    ChatLog.insert(END, "Bot: How can I help you?" + '\n\n')
+    ChatLog.config(state=DISABLED)
+    
 #Create Chat window
 ChatLog = Text(base, bd=0, bg="white", height="8", width="50", font="Arial",)
 ChatLog.config(state=DISABLED)
+
 #Bind scrollbar to Chat window
 scrollbar = Scrollbar(base, command=ChatLog.yview, cursor="heart")
 ChatLog['yscrollcommand'] = scrollbar.set
@@ -89,6 +112,9 @@ EntryBox = Text(base, bd=0, bg="white",width="29", height="5", font="Arial")
 #Place all components on the screen
 scrollbar.place(x=376,y=6, height=386)
 ChatLog.place(x=6,y=6, height=386, width=370)
-EntryBox.place(x=128, y=401, height=90, width=265)
-SendButton.place(x=6, y=401, height=90)
+EntryBox.place(x=6, y=401, height=90, width=265)
+SendButton.place(x=278, y=401, height=90)
+# Initial welcome message
+# Call the function to display the welcome message
+display_welcome_message()
 base.mainloop()

@@ -63,7 +63,7 @@
 		{
             "tag": "requests_processed",
             "patterns": ["How many requests have been processed?", "Tell me the total processed requests.", "Request count"],
-            "responses": ["We have processed {id} requests so far."],
+            "responses": ["We have processed {total_requests} requests so far."],
             "context_set": ""
         }
     ]
